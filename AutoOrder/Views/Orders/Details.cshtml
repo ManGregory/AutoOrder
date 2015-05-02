@@ -1,0 +1,122 @@
+﻿@model AutoOrder.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TransportType.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransportType.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TransportedObjectType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransportedObjectType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ObjectLength)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ObjectLength)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ObjectWidth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ObjectWidth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ObjectHeight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ObjectHeight)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProspectiveInDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProspectiveInDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProspectiveOutDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProspectiveOutDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressFrom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddressFrom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressTo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddressTo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FactInDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FactInDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FactOutDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FactOutDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

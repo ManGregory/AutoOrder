@@ -29,5 +29,11 @@ namespace AutoOrder.Models
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<TrailerType> TrailerTypes { get; set; }
+
+        public DbSet<Autopark> Autoparks { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
     }
 }

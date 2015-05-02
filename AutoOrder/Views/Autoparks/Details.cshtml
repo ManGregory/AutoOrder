@@ -1,0 +1,74 @@
+﻿@model AutoOrder.Models.Autopark
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Autopark</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TrailerType.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrailerType.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Trailer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Trailer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrailerCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrailerCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrailerLength)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrailerLength)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrailerWidth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrailerWidth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TrailerHeight)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TrailerHeight)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
