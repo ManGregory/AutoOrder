@@ -18,7 +18,7 @@ namespace AutoOrder
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
+            // Подключите здесь службу электронной почты для отправки сообщения электронной почты.
             return Task.FromResult(0);
         }
     }
@@ -27,12 +27,12 @@ namespace AutoOrder
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your SMS service here to send a text message.
+            // Подключите здесь службу SMS, чтобы отправить текстовое сообщение.
             return Task.FromResult(0);
         }
     }
 
-    // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
+    // Настройка диспетчера пользователей приложения. UserManager определяется в ASP.NET Identity и используется приложением.
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
@@ -43,14 +43,14 @@ namespace AutoOrder
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
-            // Configure validation logic for usernames
+            // Настройка логики проверки имен пользователей
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
 
-            // Configure validation logic for passwords
+            // Настройка логики проверки паролей
             manager.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
@@ -60,21 +60,21 @@ namespace AutoOrder
                 RequireUppercase = true,
             };
 
-            // Configure user lockout defaults
+            // Настройка параметров блокировки по умолчанию
             manager.UserLockoutEnabledByDefault = true;
             manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             manager.MaxFailedAccessAttemptsBeforeLockout = 5;
 
-            // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
-            // You can write your own provider and plug it in here.
-            manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
+            // Регистрация поставщиков двухфакторной проверки подлинности. Для получения кода проверки пользователя в данном приложении используется телефон и сообщения электронной почты
+            // Здесь можно указать собственный поставщик и подключить его.
+            manager.RegisterTwoFactorProvider("Код, полученный по телефону", new PhoneNumberTokenProvider<ApplicationUser>
             {
-                MessageFormat = "Your security code is {0}"
+                MessageFormat = "Ваш код безопасности: {0}"
             });
-            manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
+            manager.RegisterTwoFactorProvider("Код из сообщения", new EmailTokenProvider<ApplicationUser>
             {
-                Subject = "Security Code",
-                BodyFormat = "Your security code is {0}"
+                Subject = "Код безопасности",
+                BodyFormat = "Ваш код безопасности: {0}"
             });
             manager.EmailService = new EmailService();
             manager.SmsService = new SmsService();
@@ -88,7 +88,7 @@ namespace AutoOrder
         }
     }
 
-    // Configure the application sign-in manager which is used in this application.
+    // Настройка диспетчера входа для приложения.
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {
         public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)

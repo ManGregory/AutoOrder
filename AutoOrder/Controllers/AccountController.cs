@@ -73,8 +73,8 @@ namespace AutoOrder.Controllers
                 return View(model);
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            // Сбои при входе не приводят к блокированию учетной записи
+            // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
@@ -86,7 +86,7 @@ namespace AutoOrder.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Неудачная попытка входа.");
                     return View(model);
             }
         }
@@ -96,7 +96,7 @@ namespace AutoOrder.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
-            // Require that the user has already logged in via username/password or external login
+            // Требовать предварительный вход пользователя с помощью имени пользователя и пароля или внешнего имени входа
             if (!await SignInManager.HasBeenVerifiedAsync())
             {
                 return View("Error");
@@ -116,10 +116,10 @@ namespace AutoOrder.Controllers
                 return View(model);
             }
 
-            // The following code protects for brute force attacks against the two factor codes. 
-            // If a user enters incorrect codes for a specified amount of time then the user account 
-            // will be locked out for a specified amount of time. 
-            // You can configure the account lockout settings in IdentityConfig
+            // Приведенный ниже код защищает от атак методом подбора, направленных на двухфакторные коды. 
+            // Если пользователь введет неправильные коды за указанное время, его учетная запись 
+            // будет заблокирована на заданный период. 
+            // Параметры блокирования учетных записей можно настроить в IdentityConfig
             var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
@@ -129,7 +129,7 @@ namespace AutoOrder.Controllers
                     return View("Lockout");
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid code.");
+                    ModelState.AddModelError("", "Неправильный код.");
                     return View(model);
             }
         }
@@ -157,18 +157,18 @@ namespace AutoOrder.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
+                    // Дополнительные сведения о том, как включить подтверждение учетной записи и сброс пароля, см. по адресу: http://go.microsoft.com/fwlink/?LinkID=320771
+                    // Отправка сообщения электронной почты с этой ссылкой
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    // await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
 
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
             }
 
-            // If we got this far, something failed, redisplay form
+            // Появление этого сообщения означает наличие ошибки; повторное отображение формы
             return View(model);
         }
 
@@ -205,19 +205,19 @@ namespace AutoOrder.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
+                    // Не показывать, что пользователь не существует или не подтвержден
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
+                // Дополнительные сведения о том, как включить подтверждение учетной записи и сброс пароля, см. по адресу: http://go.microsoft.com/fwlink/?LinkID=320771
+                // Отправка сообщения электронной почты с этой ссылкой
                 // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
                 // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                // await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Сбросьте ваш пароль, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
                 // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
-            // If we got this far, something failed, redisplay form
+            // Появление этого сообщения означает наличие ошибки; повторное отображение формы
             return View(model);
         }
 
@@ -251,7 +251,7 @@ namespace AutoOrder.Controllers
             var user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
+                // Не показывать, что пользователь не существует
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
@@ -278,7 +278,7 @@ namespace AutoOrder.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            // Request a redirect to the external login provider
+            // Запрос перенаправления к внешнему поставщику входа
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
@@ -309,7 +309,7 @@ namespace AutoOrder.Controllers
                 return View();
             }
 
-            // Generate the token and send it
+            // Создание и отправка маркера
             if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
             {
                 return View("Error");
@@ -328,7 +328,7 @@ namespace AutoOrder.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Sign in the user with this external login provider if the user already has a login
+            // Выполнение входа пользователя посредством данного внешнего поставщика входа, если у пользователя уже есть имя входа
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
@@ -340,7 +340,7 @@ namespace AutoOrder.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
-                    // If the user does not have an account, then prompt the user to create an account
+                    // Если у пользователя нет учетной записи, то ему предлагается создать ее
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
@@ -361,7 +361,7 @@ namespace AutoOrder.Controllers
 
             if (ModelState.IsValid)
             {
-                // Get the information about the user from the external login provider
+                // Получение сведений о пользователе от внешнего поставщика входа
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
@@ -423,8 +423,8 @@ namespace AutoOrder.Controllers
             base.Dispose(disposing);
         }
 
-        #region Helpers
-        // Used for XSRF protection when adding external logins
+        #region Вспомогательные приложения
+        // Используется для защиты от XSRF-атак при добавлении внешних имен входа
         private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager
