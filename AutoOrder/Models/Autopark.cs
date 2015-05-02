@@ -20,7 +20,7 @@ namespace AutoOrder.Models
 
         [Required]
         [DisplayName("Количество прицепов")]
-        public string TrailerCount { get; set; }
+        public int TrailerCount { get; set; }
 
         [Required]
         [DisplayName("Тип кузова")]

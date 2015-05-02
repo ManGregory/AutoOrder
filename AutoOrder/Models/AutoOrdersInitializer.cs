@@ -9,12 +9,11 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace AutoOrder.Models
 {
-    public class AutoOrdersInitializer : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+    public class AutoOrdersInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
     {
         protected override void Seed(ApplicationDbContext context)
         {
-            var roleStore = new RoleStore<IdentityRole>(context);
-            var roleManager = new RoleManager<IdentityRole>(roleStore);
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
 
             const string roleName = "admin";
@@ -27,17 +26,29 @@ namespace AutoOrder.Models
                 roleManager.Create(new IdentityRole("client"));
             }
 
-            const string adminUserName = "admin@admin.net";
+            const string adminUserName = "admin@autoorders.com";
             if (!context.Users.Any(u => u.Email == adminUserName))
             {
                 var user = new ApplicationUser
                 {
-                    UserName = "admin@admin.net",
+                    UserName = adminUserName,
                     Email = adminUserName,
                 };
-                var result = userManager.Create(user, roleName + "123");
+                userManager.Create(user, "admin123");
                 userManager.AddToRole(user.Id, roleName);
             }
+
+            context.TrailerTypes.Add(new TrailerType
+            {
+                Name = "открытый",
+                TransportName = "открытая"
+            });
+            context.TrailerTypes.Add(new TrailerType
+            {
+                Name = "крытый",
+                TransportName = "крытая"
+            });
+            context.SaveChanges();
         }
     }
 }

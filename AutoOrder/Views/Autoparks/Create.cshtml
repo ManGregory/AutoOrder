@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Create";
+    HtmlHelper.ClientValidationEnabled = false;
 }
 
 <h2>Create</h2>
@@ -66,7 +67,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TrailerHeight, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TrailerHeight, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.TrailerHeight, new { htmlAttributes = new { @data_val = "false", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.TrailerHeight, "", new { @class = "text-danger" })
             </div>
         </div>
