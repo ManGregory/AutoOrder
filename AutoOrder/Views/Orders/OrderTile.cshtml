@@ -1,0 +1,13 @@
+﻿@model AutoOrder.Models.Order
+
+<div class="col-sm-3">
+    <a href="@Url.Action("Details", new {id = Model.Id})">
+        <div class="panel panel-@(Model.HtmlClassForRow)">
+            <div class="panel-heading text-center">
+                <b>
+                    @Html.DisplayFor(model => model.ProspectiveInDate, "ShortDate")
+                </b>
+            </div>
+        </div>
+    </a>
+</div>

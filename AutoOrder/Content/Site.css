@@ -31,3 +31,63 @@ textarea {
 tr.info {
     background: #b7e7eb
 }
+
+.panel-heading {
+    padding: 30px;
+    font-size: 20px;
+    color: black;
+}
+
+.panel-default > .panel-heading:hover {
+    color: black;
+    background-color: #dddddd;    
+}
+
+.panel-warning > .panel-heading {
+    color: black;
+}
+
+.panel-warning > .panel-heading:hover {
+    background-color: #fbeed5;
+}
+
+.panel-info > .panel-heading {
+    color: black;
+}
+
+.panel-info > .panel-heading:hover {
+    background-color: #fbeed5;
+}
+
+.panel-danger > .panel-heading {
+    color: black;
+}
+
+.panel-danger > .panel-heading:hover {
+    background-color: #eed3d7;
+}
+
+.panel-success > .panel-heading {
+    color: black;
+}
+
+.panel-success > .panel-heading:hover {
+    background-color: #d6e9c6;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:link {
+    text-decoration: none;
+}

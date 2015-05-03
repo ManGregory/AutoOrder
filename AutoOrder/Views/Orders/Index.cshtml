@@ -1,13 +1,16 @@
-﻿@model IEnumerable<AutoOrder.Models.Order>
+﻿@using System.Collections.Specialized
+@model IEnumerable<AutoOrder.Models.Order>
 
 @{
     ViewBag.Title = "Заявки на автотранспорт";
+    const int colSize = 4;
+    var rows = (int)(Model.Count() / colSize);
 }
 
 <h2>Заявки на автотранспорт</h2>
 
 <p>
-    @Html.ActionLink("Создать заявку", "Create")
+    @Html.ActionLink("Создать заявку", "Create", null, new { @class = "btn btn-primary" })
 </p>
 
 <div>
@@ -18,7 +21,17 @@
     <span class="label label-danger">Заявки по которым истек срок</span>
 </div>
 <br />
-<div class="orders">
+
+@for (var row = 0; row <= rows; row++)
+{
+    <div class="row">
+        @foreach (var item in Model.Skip(row * colSize).Take(colSize))
+        {
+            Html.RenderPartial("OrderTile", item);
+        }
+    </div>
+}
+@*<div class="orders">
     <table class="table">
         <tr>
             <th>                
@@ -146,4 +159,4 @@
 
     </table>
 
-</div>
+</div>*@
