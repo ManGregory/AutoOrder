@@ -117,9 +117,16 @@ namespace AutoOrder.Controllers
             if (availableAutoPark != null)
             {
                 var firstOrDefault = availableAutoPark
-                    .FirstOrDefault(a => a.Capacity >= order.Capacity);
+                    .FirstOrDefault(a => a.Capacity >= order.Capacity && a.TrailerTypeId == order.TransportTypeId);
                 if (firstOrDefault != null)
+                {
                     order.AutoparkId = firstOrDefault.Id;
+                }
+                else
+                {
+                    order.Comment =
+                        "Нет свободных машин, которые могли бы выполнить вашу заявку. Обратитесь к администратору: admin@autoorders.com";
+                }
             }
         }
 

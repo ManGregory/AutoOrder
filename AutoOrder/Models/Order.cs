@@ -76,6 +76,9 @@ namespace AutoOrder.Models
         [ForeignKey("AutoparkId")]
         public virtual Autopark Autopark { get; set; }
 
+        [DisplayName("Примечание")]
+        public string Comment { get; set; }
+
         public bool IsCancelled { get; set; }
 
         public double Capacity
