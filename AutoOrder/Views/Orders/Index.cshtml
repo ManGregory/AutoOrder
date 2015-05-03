@@ -126,10 +126,10 @@
                 <td>
                     @if (!(item.IsCompleted || item.IsCancelled) || (User.IsInRole("admin")))
                     {
-                        @Html.ActionLink("Редактировать", "Edit", new {id = item.Id})
+                        @Html.ActionLink("Редактировать", "Edit", new { id = item.Id })
     <br />
                     }                                        
-                    @Html.ActionLink("Просмотр", "Details", new {id = item.Id})                    
+                    @Html.ActionLink("Просмотр", "Details", new { id = item.Id })                    
                     @if (!(item.IsCompleted || item.IsCancelled))
                     {
                         <br />
@@ -138,7 +138,7 @@
                     @if (User.IsInRole("admin"))
                     {
                         <br />
-                        @Html.ActionLink("Удалить", "Delete", new {id = item.Id})
+                        @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
                     }
                 </td>
             </tr>
