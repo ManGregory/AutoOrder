@@ -1,105 +1,149 @@
 ﻿@model IEnumerable<AutoOrder.Models.Order>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Заявки на автотранспорт";
 }
 
-<h2>Index</h2>
+<h2>Заявки на автотранспорт</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать заявку", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TransportType.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Phone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TransportedObjectType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ObjectLength)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ObjectWidth)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ObjectHeight)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProspectiveInDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProspectiveOutDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AddressFrom)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AddressTo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FactInDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FactOutDate)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TransportType.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Phone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TransportedObjectType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ObjectLength)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ObjectWidth)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ObjectHeight)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProspectiveInDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProspectiveOutDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AddressFrom)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AddressTo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FactInDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FactOutDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+<div>
+    <span class="label label-default">Новые заявки</span>
+    <span class="label label-success">Выполненные заявки</span>
+    <span class="label label-info">Отмененные заявки</span>
+    <span class="label label-warning">Заявки без привязанного автомобиля</span>
+    <span class="label label-danger">Заявки по которым истек срок</span>
+</div>
+<br />
+<div class="orders">
+    <table class="table">
+        <tr>
+            <th>                
+            </th>
+            @if (User.IsInRole("admin"))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.User.Email)
+                </th>
+            }
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransportedObjectType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransportType.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ObjectLength)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ObjectWidth)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ObjectHeight)
+            </th>
+            <th>
+                Перс-ая дата погрузки
+            </th>
+            <th>
+                Перс-ая дата разгрузки
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AutoparkId)
+            </th>
+            <th>
+                Факт. дата погрузки
+            </th>
+            <th>
+                Факт. дата разгрузки
+            </th>
+            <th></th>
+        </tr>
 
-</table>
+        @foreach (var item in Model)
+        {
+
+            <tr class="@item.HtmlClassForRow">
+                <td>
+                    <span class="label label-@(item.HtmlClassForRow)">  </span>
+                </td>
+                @if (User.IsInRole("admin"))
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.Email)
+                    </td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransportedObjectType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TransportType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ObjectLength)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ObjectWidth)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ObjectHeight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProspectiveInDate, "ShortDate")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProspectiveOutDate, "ShortDate")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressFrom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressTo)
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Autopark.Name)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FactInDate, "ShortDate")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FactOutDate, "ShortDate")
+                </td>
+                <td>
+                    @if (!(item.IsCompleted || item.IsCancelled) || (User.IsInRole("admin")))
+                    {
+                        @Html.ActionLink("Редактировать", "Edit", new {id = item.Id})
+    <br />
+                    }                                        
+                    @Html.ActionLink("Просмотр", "Details", new {id = item.Id})                    
+                    @if (!(item.IsCompleted || item.IsCancelled))
+                    {
+                        <br />
+                        @Html.ActionLink("Отмена", "Cancel", new {id = item.Id})
+                    }
+                    @if (User.IsInRole("admin"))
+                    {
+                        <br />
+                        @Html.ActionLink("Удалить", "Delete", new {id = item.Id})
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+
+</div>

@@ -25,6 +25,7 @@ namespace AutoOrder.Models
         [Required]
         [DisplayName("Тип кузова")]
         public int TrailerTypeId { get; set; }
+        [DisplayName("Тип кузова")]
         [ForeignKey("TrailerTypeId")]
         public virtual TrailerType TrailerType { get; set; }
 
@@ -39,5 +40,9 @@ namespace AutoOrder.Models
         [Required]
         [DisplayName("Высота прицепа")]
         public double TrailerHeight { get; set; }
+
+        public double Capacity {
+            get { return TrailerWidth*TrailerHeight*TrailerLength; }
+        }
     }
 }

@@ -1,122 +1,76 @@
 ﻿@model AutoOrder.Models.Order
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Заявки на автотранспорт | Просмотр";
 }
 
-<h2>Details</h2>
+<h2>Просмотр информации о заявке</h2>
 
 <div>
-    <h4>Order</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.TransportType.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TransportType.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TransportedObjectType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TransportedObjectType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ObjectLength)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ObjectLength)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ObjectWidth)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ObjectWidth)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ObjectHeight)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ObjectHeight)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ProspectiveInDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProspectiveInDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ProspectiveOutDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProspectiveOutDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AddressFrom)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AddressFrom)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AddressTo)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AddressTo)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FactInDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FactInDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.FactOutDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FactOutDate)
-        </dd>
-
-    </dl>
+    <table class="table">
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.User.Email)</b></td>
+            <td>@Html.DisplayFor(model => model.User.Email)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.Phone)</b></td>
+            <td>@Html.DisplayFor(model => model.Phone)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.TransportedObjectType)</b></td>
+            <td>@Html.DisplayFor(model => model.TransportedObjectType)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.TransportType.Name)</b></td>
+            <td>@Html.DisplayFor(model => model.TransportType.Name)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.ObjectLength)</b></td>
+            <td>@Html.DisplayFor(model => model.ObjectLength)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.ObjectHeight)</b></td>
+            <td>@Html.DisplayFor(model => model.ObjectHeight)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.User.Email)</b></td>
+            <td>@Html.DisplayFor(model => model.User.Email)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.ObjectWidth)</b></td>
+            <td>@Html.DisplayFor(model => model.ObjectWidth)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.ProspectiveInDate)</b></td>
+            <td>@Html.DisplayFor(model => model.ProspectiveOutDate)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.ProspectiveOutDate)</b></td>
+            <td>@Html.DisplayFor(model => model.ProspectiveOutDate)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.AddressFrom)</b></td>
+            <td>@Html.DisplayFor(model => model.AddressFrom)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.AddressTo)</b></td>
+            <td>@Html.DisplayFor(model => model.AddressTo)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.Autopark.Name)</b></td>
+            <td>@Html.DisplayFor(model => model.Autopark.Name)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.FactInDate)</b></td>
+            <td>@Html.DisplayFor(model => model.FactInDate)</td>
+        </tr>
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.FactOutDate)</b></td>
+            <td>@Html.DisplayFor(model => model.FactOutDate)</td>
+        </tr>
+    </table>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Заявки на автотранспорт", "Index")
 </p>

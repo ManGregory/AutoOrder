@@ -1,11 +1,11 @@
 ﻿@model AutoOrder.Models.Autopark
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Автопарк | Добавление";
     HtmlHelper.ClientValidationEnabled = false;
 }
 
-<h2>Create</h2>
+<h2>Добавление нового автомобиля</h2>
 
 
 @using (Html.BeginForm()) 
@@ -13,7 +13,6 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Autopark</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -41,7 +40,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TrailerTypeId, "TrailerTypeId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.TrailerTypeId, "Тип кузова", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("TrailerTypeId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.TrailerTypeId, "", new { @class = "text-danger" })
@@ -51,7 +50,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TrailerLength, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TrailerLength, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.TrailerLength, new { htmlAttributes = new { @data_val = "false", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.TrailerLength, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -59,7 +58,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.TrailerWidth, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TrailerWidth, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.TrailerWidth, new { htmlAttributes = new { @data_val = "false", @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.TrailerWidth, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -74,14 +73,14 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Добавить" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Автопарк", "Index")
 </div>
 
 @section Scripts {

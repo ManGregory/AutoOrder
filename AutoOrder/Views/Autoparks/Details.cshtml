@@ -1,16 +1,15 @@
 ﻿@model AutoOrder.Models.Autopark
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Автопарк | Просмотр";
 }
 
-<h2>Details</h2>
+<h2>Просмотр информации об автомобиле</h2>
 
 <div>
-    <h4>Autopark</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
+        <dt class="col-md-4">
             @Html.DisplayNameFor(model => model.TrailerType.Name)
         </dt>
 
@@ -18,7 +17,7 @@
             @Html.DisplayFor(model => model.TrailerType.Name)
         </dd>
 
-        <dt>
+        <dt class ="col-md-4">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
 
@@ -26,7 +25,7 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
 
-        <dt>
+        <dt class="col-md-4">
             @Html.DisplayNameFor(model => model.Trailer)
         </dt>
 
@@ -34,7 +33,7 @@
             @Html.DisplayFor(model => model.Trailer)
         </dd>
 
-        <dt>
+        <dt class="col-md-4">
             @Html.DisplayNameFor(model => model.TrailerCount)
         </dt>
 
@@ -42,7 +41,7 @@
             @Html.DisplayFor(model => model.TrailerCount)
         </dd>
 
-        <dt>
+        <dt class="col-md-4">
             @Html.DisplayNameFor(model => model.TrailerLength)
         </dt>
 
@@ -50,7 +49,7 @@
             @Html.DisplayFor(model => model.TrailerLength)
         </dd>
 
-        <dt>
+        <dt class="col-md-4">
             @Html.DisplayNameFor(model => model.TrailerWidth)
         </dt>
 
@@ -58,7 +57,7 @@
             @Html.DisplayFor(model => model.TrailerWidth)
         </dd>
 
-        <dt>
+        <dt class="col-md-4">
             @Html.DisplayNameFor(model => model.TrailerHeight)
         </dt>
 
@@ -69,6 +68,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Автопарк", "Index")
 </p>

@@ -10,6 +10,7 @@ using AutoOrder.Models;
 
 namespace AutoOrder.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class TrailerTypesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

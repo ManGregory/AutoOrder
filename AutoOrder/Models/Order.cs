@@ -27,18 +27,18 @@ namespace AutoOrder.Models
         [DisplayName("Тип перевозки")]
         public int TransportTypeId { get; set; }
         [ForeignKey("TransportTypeId")]
-        public TrailerType TransportType { get; set; }
+        public virtual TrailerType TransportType { get; set; }
 
         [Required]
-        [DisplayName("Длина прицепа")]
+        [DisplayName("Длина объекта")]
         public double ObjectLength { get; set; }
 
         [Required]
-        [DisplayName("Ширина прицепа")]
+        [DisplayName("Ширина объекта")]
         public double ObjectWidth { get; set; }
 
         [Required]
-        [DisplayName("Высота прицепа")]
+        [DisplayName("Высота объекта")]
         public double ObjectHeight { get; set; }
 
         [Required]
@@ -71,10 +71,42 @@ namespace AutoOrder.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime? FactOutDate { get; set; }
 
+        [DisplayName("Автомобиль для перевозки")]
         public int? AutoparkId { get; set; }
         [ForeignKey("AutoparkId")]
-        public Autopark Autopark { get; set; }
+        public virtual Autopark Autopark { get; set; }
 
         public bool IsCancelled { get; set; }
+
+        public double Capacity
+        {
+            get { return ObjectWidth * ObjectHeight * ObjectLength; }
+        }
+
+        public bool IsCompleted
+        {
+            get { return (FactInDate != null) && (FactOutDate != null); }
+        }
+
+        public bool HasAuto
+        {
+            get { return AutoparkId != null; }
+        }
+
+        public bool IsOutOfDate
+        {
+            get { return ProspectiveOutDate < DateTime.Now; }
+        }
+
+        public string HtmlClassForRow {
+            get
+            {
+                if (IsCancelled) return "info";
+                if (IsCompleted) return "success";
+                if (IsOutOfDate) return "danger";
+                if (!HasAuto) return "warning";
+                return "default";
+            }
+        }
     }
 }

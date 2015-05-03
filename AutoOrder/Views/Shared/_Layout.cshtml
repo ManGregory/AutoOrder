@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title – приложение ASP.NET</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -24,8 +24,14 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Главная", "Index", "Home")</li>
                     <li>@Html.ActionLink("О нас", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Заявки", "Index", "Orders")</li>
-                    <li>@Html.ActionLink("Автопарк", "Index", "Autoparks")</li>
+                    @if (User.IsInRole("client") || User.IsInRole("admin"))
+                    {
+                        <li>@Html.ActionLink("Заявки", "Index", "Orders")</li>
+                    }
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li>@Html.ActionLink("Автопарк", "Index", "Autoparks")</li>
+                    }                    
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -35,7 +41,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year – приложение ASP.NET</p>
+            <p>&copy; @DateTime.Now.Year – Учет заявок на автотранспорт</p>
         </footer>
     </div>
 

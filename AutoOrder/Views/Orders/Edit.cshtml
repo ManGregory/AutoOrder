@@ -1,10 +1,11 @@
 ﻿@model AutoOrder.Models.Order
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Заявки на автотранспорт | Редактирование заявки";
+    HtmlHelper.ClientValidationEnabled = false;
 }
 
-<h2>Edit</h2>
+<h2>Редактирование заявки</h2>
 
 
 @using (Html.BeginForm())
@@ -12,18 +13,11 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Order</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.UserId, "UserId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @Html.HiddenFor(model => model.UserId)
+        @Html.HiddenFor(model => model.AutoparkId)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -42,7 +36,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TransportTypeId, "TransportTypeId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.TransportTypeId, "Тип перевозки", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("TransportTypeId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.TransportTypeId, "", new { @class = "text-danger" })
@@ -104,33 +98,43 @@
                 @Html.ValidationMessageFor(model => model.AddressTo, "", new { @class = "text-danger" })
             </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.FactInDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FactInDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FactInDate, "", new { @class = "text-danger" })
+        
+        @if (User.IsInRole("admin"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.AutoparkId, "Автомобиль для перевозки", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("AutoparkId", null, string.Empty, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TransportTypeId, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.FactOutDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FactOutDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FactOutDate, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.FactInDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FactInDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FactInDate, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
+            <div class="form-group">
+                @Html.LabelFor(model => model.FactOutDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FactOutDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FactOutDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Сохранить" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Заявки на автотранспорт", "Index")
 </div>
 
 @section Scripts {
