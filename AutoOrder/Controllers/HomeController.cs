@@ -26,5 +26,10 @@ namespace AutoOrder.Controllers
 
             return View();
         }
+
+        public ActionResult Feedback()
+        {
+            return View();
+        }
     }
 }
