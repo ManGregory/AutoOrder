@@ -63,20 +63,31 @@ namespace AutoOrder.Controllers
             return View();
         }
 
-        private void SetViewBag(int? autoParkId = null)
+        private void SetViewBag(int? autoParkId = null, Order order = null)
         {
             ViewBag.TransportTypeId = new SelectList(db.TrailerTypes, "Id", "Name");
-            var availableAutopark = GetAvailableAutopark(autoParkId);
+            var availableAutopark = GetAvailableAutopark(autoParkId, order);
             ViewBag.AutoparkId = new SelectList(availableAutopark, "Id", "Name", autoParkId);
-        }
+        }        
 
-        private IEnumerable<Autopark> GetAvailableAutopark(int? currentAutoparkId = null)
+        private IEnumerable<Autopark> GetAvailableAutopark(int? currentAutoparkId = null, Order currentOrder = null)
         {
-            return
-                db.Autoparks.Where(
+            var orders = db.Orders.AsEnumerable().ToList();
+            var autoparks = db.Autoparks.AsEnumerable().ToList();
+            var result = 
+                autoparks.Where(
                     a =>
-                        a.Id == currentAutoparkId ||
-                        !db.Orders.Any(o => (o.AutoparkId == a.Id) && (o.FactOutDate == null) && !o.IsCancelled));
+                        (a.Id == currentAutoparkId ||
+                         !orders.Any(
+                             o =>
+                                 (o.AutoparkId == a.Id) && (o.FactOutDate == null) && !o.IsCancelled)));
+            if (currentOrder != null)
+            {
+                result =
+                    result.Where(
+                        a => a.CanCarry(currentOrder.ObjectLength, currentOrder.ObjectWidth, currentOrder.ObjectHeight));
+            }
+            return result;
         }
 
         // POST: Orders/Create
@@ -117,7 +128,11 @@ namespace AutoOrder.Controllers
             if (availableAutoPark != null)
             {
                 var firstOrDefault = availableAutoPark
-                    .FirstOrDefault(a => a.Capacity >= order.Capacity && a.TrailerTypeId == order.TransportTypeId);
+                    .AsEnumerable()
+                    .FirstOrDefault(
+                        a =>
+                            a.CanCarry(order.ObjectLength, order.ObjectWidth, order.ObjectHeight) &&
+                            a.TrailerTypeId == order.TransportTypeId);
                 if (firstOrDefault != null)
                 {
                     order.AutoparkId = firstOrDefault.Id;
@@ -142,7 +157,7 @@ namespace AutoOrder.Controllers
             {
                 return HttpNotFound();
             }
-            SetViewBag(order.AutoparkId);
+            SetViewBag(order.AutoparkId, order);
             return View(order);
         }
 
@@ -151,7 +166,7 @@ namespace AutoOrder.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserId,Phone,TransportedObjectType,TransportTypeId,ObjectLength,ObjectWidth,ObjectHeight,ProspectiveInDate,ProspectiveOutDate,AddressFrom,AddressTo,FactInDate,FactOutDate,AutoparkId")] Order order)
+        public ActionResult Edit([Bind(Include = "Id,UserId,Phone,TransportedObjectType,TransportTypeId,ObjectLength,ObjectWidth,ObjectHeight,ProspectiveInDate,ProspectiveOutDate,AddressFrom,AddressTo,FactInDate,FactOutDate,AutoparkId,Comment")] Order order)
         {
             CheckDates(ModelState, order);
             if (ModelState.IsValid)

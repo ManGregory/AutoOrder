@@ -10,7 +10,8 @@ namespace AutoOrder
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
-
+            bundles.Add(new ScriptBundle("~/bundles/bxslider").Include(
+                "~/Scripts/jquery.bxslider.min.js"));
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
@@ -25,7 +26,8 @@ namespace AutoOrder
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/jquery.bxslider.css"));
         }
     }
 }

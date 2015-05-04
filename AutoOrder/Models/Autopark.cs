@@ -44,5 +44,10 @@ namespace AutoOrder.Models
         public double Capacity {
             get { return TrailerWidth*TrailerHeight*TrailerLength; }
         }
+
+        public bool CanCarry(double objectLength, double objectWidth, double objectHeight)
+        {
+            return Capacity >= (objectLength*objectWidth*objectHeight);
+        }
     }
 }
