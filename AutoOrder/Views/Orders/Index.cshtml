@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Заявки на автотранспорт";
     const int colSize = 4;
-    var rows = (int)(Model.Count() / colSize);
+    var rows = (Model.Count() / colSize);
 }
 
 <h2>Заявки на автотранспорт</h2>
@@ -14,11 +14,13 @@
 </p>
 
 <div>
-    <span class="label label-default">Новые заявки</span>
-    <span class="label label-success">Выполненные заявки</span>
-    <span class="label label-info">Отмененные заявки</span>
-    <span class="label label-warning">Заявки без привязанного автомобиля</span>
-    <span class="label label-danger">Заявки по которым истек срок</span>
+    <h4>
+        <span class="label label-default">Новые заявки</span>
+        <span class="label label-success">Выполненные заявки</span>
+        <span class="label label-info">Отмененные заявки</span>
+        <span class="label label-warning">Заявки без привязанного автомобиля</span>
+        <span class="label label-danger">Заявки по которым истек срок</span>
+    </h4>
 </div>
 <br />
 
