@@ -97,13 +97,6 @@ div.overlay-wrapper{
     position:relative; /* important(so we can absolutely position the description div */    
 }  
 
-div.overlay-wrapper:hover {
-    background-color: black;
-    /*opacity:0.1;*/
-    z-index: 0;
-    filter:alpha(opacity=60); /* IE transparency */  
-}
-
 div.overlay-description-bottom{  
     position:absolute; /* absolute position (so we can position it where we want)*/  
     bottom:0px; /* position will be on bottom */  

@@ -23,7 +23,6 @@
     <div class="col-md-6">
         <div class="row main">
             <div class="overlay-wrapper">
-                <div>asfdasd</div>
                 <a href="@Url.Action("Contact")">
                     <img src="/Content/Images/main-img.jpg" class="img-responsive" />
                     <div class="overlay-description-bottom">
@@ -130,6 +129,7 @@
 
             $('.overlay-wrapper').hover(
                 function () {
+                    $('.overlay-description-top').css("height", $(this).height());
                     $('.overlay-description-bottom', this).fadeOut(200);
                     $('.overlay-description-top', this).fadeIn(200);
                 },
