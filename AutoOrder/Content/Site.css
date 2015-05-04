@@ -38,41 +38,59 @@ tr.info {
     color: black;
 }
 
-.panel-default > .panel-heading:hover {
+.panel-default > .panel-heading:hover {    
+    background-color: #999;
+    border-color: #999; 
+}
+
+.panel-warning > .panel-heading:hover {
+    background-color: #f0ad4e;
+    border-color: #f0ad4e; 
+}
+
+.panel-success > .panel-heading:hover {
+    background-color: #5cb85c;
+    border-color: #5cb85c; 
+}
+
+.panel-danger > .panel-heading:hover {
+    background-color: #d9534f;
+    border-color: #d9534f; 
+}
+
+.panel-info > .panel-heading:hover {
+    background-color: #5bc0de;
+    border-color: #5bc0de; 
+}
+
+.panel-default > .panel-heading {
     color: black;
-    background-color: #dddddd;    
+    background-color: #b7b7b7;
+    border-color: #b7b7b7;    
 }
 
 .panel-warning > .panel-heading {
     color: black;
-}
-
-.panel-warning > .panel-heading:hover {
-    background-color: #fbeed5;
+    background-color: #f4c47f;
+    border-color: #f4c47f;
 }
 
 .panel-info > .panel-heading {
     color: black;
-}
-
-.panel-info > .panel-heading:hover {
-    background-color: #bce8f1;
+    background-color: #79c7de;
+    border-color: #79c7de;
 }
 
 .panel-danger > .panel-heading {
     color: black;
-}
-
-.panel-danger > .panel-heading:hover {
-    background-color: #eed3d7;
+    background-color: #d97673; 
+    border-color: #d97673; 
 }
 
 .panel-success > .panel-heading {
     color: black;
-}
-
-.panel-success > .panel-heading:hover {
-    background-color: #d6e9c6;
+    background-color: #83b871;
+    border-color: #83b871;
 }
 
 

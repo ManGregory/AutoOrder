@@ -10,15 +10,15 @@
 <style type="text/css">.slider { margin: 0;}</style>
 <br />
 
-@*<div class="row main">    
+<div class="row main">    
     <div class="slider col-md-12">
         <ul class="bxslider">
             <li><img src="/Content/Images/2.jpg" /></li>
             <li><img src="/Content/Images/3.jpg" /></li>
         </ul>
     </div>
-</div>*@
-
+</div>
+<br />
 <div class="row main">
     <div class="col-md-6">
         <div class="row main">
@@ -124,7 +124,8 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('.bxslider').bxSlider({
-                mode: "fade"
+                mode: "fade",
+                pager: false
             });
 
             $('.overlay-wrapper').hover(
