@@ -65,7 +65,9 @@ namespace AutoOrder.Controllers
 
         private void SetViewBag(int? autoParkId = null, Order order = null)
         {
-            ViewBag.TransportTypeId = new SelectList(db.TrailerTypes, "Id", "Name");
+            ViewBag.TransportTypeId = order == null
+                ? new SelectList(db.TrailerTypes, "Id", "Name")
+                : new SelectList(db.TrailerTypes, "Id", "Name", order.TransportTypeId);              
             var availableAutopark = GetAvailableAutopark(autoParkId, order);
             ViewBag.AutoparkId = new SelectList(availableAutopark, "Id", "Name", autoParkId);
         }        
@@ -175,7 +177,7 @@ namespace AutoOrder.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            SetViewBag(order.AutoparkId);
+            SetViewBag(order.AutoparkId, order);
             return View(order);
         }
 
