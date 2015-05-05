@@ -99,7 +99,7 @@ namespace AutoOrder.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,UserId,Phone,TransportedObjectType,TransportTypeId,ObjectLength,ObjectWidth,ObjectHeight,ProspectiveInDate,ProspectiveOutDate,AddressFrom,AddressTo,FactInDate,FactOutDate,AutoparkId")] Order order)
         {
-            CheckDates(ModelState, order);
+            Check(order);
             if (ModelState.IsValid)
             {
                 order.UserId = CurrentUserId;
@@ -112,6 +112,12 @@ namespace AutoOrder.Controllers
             return View(order);
         }
 
+        private void Check(Order order)
+        {
+            CheckDates(ModelState, order);
+            CheckLogic(ModelState, order);
+        }
+
         private void CheckDates(ModelStateDictionary modelState, Order order)
         {
             if (order.FactInDate > order.FactOutDate)
@@ -121,6 +127,14 @@ namespace AutoOrder.Controllers
             if (order.ProspectiveInDate > order.ProspectiveOutDate)
             {
                 modelState.AddModelError("", "Перспективная дата погрузки должна быть меньше фактической даты погрузки");
+            }
+        }
+
+        private void CheckLogic(ModelStateDictionary modelState, Order order)
+        {
+            if ((order.FactInDate != null || order.FactOutDate != null) && (order.AutoparkId == null))
+            {
+                modelState.AddModelError("", "Перед занесением фактических дат необходимо назначить автомобиль");
             }
         }
 
@@ -170,7 +184,7 @@ namespace AutoOrder.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,UserId,Phone,TransportedObjectType,TransportTypeId,ObjectLength,ObjectWidth,ObjectHeight,ProspectiveInDate,ProspectiveOutDate,AddressFrom,AddressTo,FactInDate,FactOutDate,AutoparkId,Comment")] Order order)
         {
-            CheckDates(ModelState, order);
+            Check(order);
             if (ModelState.IsValid)
             {
                 db.Entry(order).State = EntityState.Modified;
