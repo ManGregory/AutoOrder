@@ -15,7 +15,7 @@ namespace AutoOrder.Controllers
     [Authorize(Roles = "admin, client")]
     public class OrdersController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         private string CurrentUserId
         {
@@ -38,7 +38,9 @@ namespace AutoOrder.Controllers
             {
                 orders = orders.Where(o => o.UserId == CurrentUserId);
             }
-            return View(orders.OrderBy(o => o.FactOutDate.HasValue).ThenByDescending(o => o.FactOutDate).ToList());
+            return View(orders
+                .OrderBy(o => o.FactOutDate.HasValue)
+                .ThenByDescending(o => o.FactOutDate).ToList());
         }
 
         // GET: Orders/Details/5

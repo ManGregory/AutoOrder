@@ -29,6 +29,7 @@ namespace AutoOrder.Controllers
 
         public ActionResult Feedback()
         {
+            ViewBag.Message = "Связаться с нами";
             return View();
         }
     }
