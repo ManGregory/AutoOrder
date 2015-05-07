@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using AutoOrder.Models;
 using Microsoft.AspNet.Identity;
@@ -28,19 +25,54 @@ namespace AutoOrder.Controllers
         }
 
         // GET: Orders
-        public ActionResult Index()
-        {            
+        public ActionResult Index(string sortOrder, bool? showAll, bool? currentShowAll)
+        {
+            SetSortOrderParams(sortOrder);
+            showAll = showAll ?? currentShowAll;
             var orders = db.Orders
                 .Include(o => o.TransportType)
                 .Include(o => o.User)
-                .Include(o => o.Autopark);
+                .Include(o => o.Autopark)
+                .AsEnumerable();
+            ViewBag.CurrentShowAll = showAll;
+            if (showAll.HasValue && !showAll.Value && User.IsInRole("admin"))
+            {
+                orders = orders.Where(o => o.IsInLastDecade);
+            }
             if (!IsAdmin)
             {
                 orders = orders.Where(o => o.UserId == CurrentUserId);
             }
-            return View(orders
-                .OrderBy(o => o.FactOutDate.HasValue)
-                .ThenByDescending(o => o.FactOutDate).ToList());
+            switch (sortOrder)
+            {
+                case "dateProspective":
+                    orders = orders.OrderBy(o => o.ProspectiveInDate);
+                    break;
+                case "dateFact":
+                    orders = orders.OrderBy(o => o.FactOutDate);
+                    break;
+                case "dateFactDesc":
+                    orders = orders.OrderByDescending(o => o.FactOutDate);
+                    break;
+                case "userName":
+                    orders = orders.OrderBy(o => o.User.UserName);
+                    break;
+                case "userNameDesc":
+                    orders = orders.OrderByDescending(o => o.User.UserName);
+                    break;
+                default:
+                    orders = orders.OrderByDescending(o => o.ProspectiveInDate);
+                    break;
+            }
+            return View(orders.ToList());
+        }
+
+        private void SetSortOrderParams(string sortOrder)
+        {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateProspectiveSort = string.IsNullOrEmpty(sortOrder) ? "dateProspective" : "";
+            ViewBag.DateFactSort = sortOrder == "dateFact" ? "dateFactDesc" : "dateFact";
+            ViewBag.UserNameSort = sortOrder == "userName" ? "userNameDesc" : "userName";            
         }
 
         // GET: Orders/Details/5

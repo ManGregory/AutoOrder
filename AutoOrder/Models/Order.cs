@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using AutoOrder.Misc;
 
 namespace AutoOrder.Models
 {
@@ -101,7 +102,17 @@ namespace AutoOrder.Models
             get { return ProspectiveOutDate < DateTime.Now; }
         }
 
-        public string HtmlClassForRow {
+        public bool IsInLastDecade
+        {
+            get
+            {
+                return
+                    ProspectiveInDate.GetDecade() == DateTime.Now.GetDecade();
+            }
+        }
+
+        public string HtmlClassForRow 
+        {
             get
             {
                 if (IsCancelled) return "info";

@@ -1,5 +1,4 @@
-﻿@using System.Collections.Specialized
-@model IEnumerable<AutoOrder.Models.Order>
+﻿@model IEnumerable<AutoOrder.Models.Order>
 
 @{
     ViewBag.Title = "Заявки на автотранспорт";
@@ -12,6 +11,37 @@
 <p>
     @Html.ActionLink("Создать заявку", "Create", null, new { @class = "btn btn-primary" })
 </p>
+
+<div>
+    Сортировать по:
+    @Html.ActionLink("Перспективная дата погрузки", "Index", new
+    {
+        sortOrder = ViewBag.DateProspectiveSort,
+        showAll = ViewBag.CurrentShowAll
+    }) |
+    @Html.ActionLink("Фактическая дата разгрузки ", "Index", new
+    {
+        sortOrder = ViewBag.DateFactSort,
+        showAll = ViewBag.CurrentShowAll
+    }) 
+    @if (User.IsInRole("admin"))
+    {
+        @:|
+        @Html.ActionLink("Имя пользователя", "Index", new
+        {
+            sortOrder = ViewBag.UserNameSort,
+            showAll = ViewBag.CurrentShowAll
+        })
+    }
+    @if (User.IsInRole("admin"))
+    {
+        <br />
+        @:Фильтр:
+        @Html.ActionLink("За последнюю декаду", "Index", new { showAll = false })
+        @:|
+        @Html.ActionLink("За все время", "Index", new { showAll = true });
+    }
+</div>
 
 <div>
     <h4>
@@ -27,7 +57,7 @@
 @for (var row = 0; row <= rows; row++)
 {
     <div class="row">
-        @foreach (var item in Model.Skip(row*colSize).Take(colSize))
+        @foreach (var item in Model.Skip(row * colSize).Take(colSize))
         {
             Html.RenderPartial("OrderTile", item);
         }
