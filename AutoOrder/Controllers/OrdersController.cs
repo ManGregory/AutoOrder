@@ -35,7 +35,11 @@ namespace AutoOrder.Controllers
                 .Include(o => o.Autopark)
                 .AsEnumerable();
             ViewBag.CurrentShowAll = showAll;
-            if (showAll.HasValue && !showAll.Value && User.IsInRole("admin"))
+            if (showAll.HasValue && User.IsInRole("admin"))
+            {
+                if (!showAll.Value) orders = orders.Where(o => o.IsInLastDecade);
+            }
+            else
             {
                 orders = orders.Where(o => o.IsInLastDecade);
             }
