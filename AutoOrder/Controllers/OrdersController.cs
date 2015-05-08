@@ -25,19 +25,19 @@ namespace AutoOrder.Controllers
         }
 
         // GET: Orders
-        public ActionResult Index(string sortOrder, bool? showAll, bool? currentShowAll)
+        public ActionResult Index(string sortOrder, string filter, string sortType)
         {
             SetSortOrderParams(sortOrder);
-            showAll = showAll ?? currentShowAll;
             var orders = db.Orders
                 .Include(o => o.TransportType)
                 .Include(o => o.User)
                 .Include(o => o.Autopark)
                 .AsEnumerable();
-            ViewBag.CurrentShowAll = showAll;
-            if (showAll.HasValue && User.IsInRole("admin"))
+            ViewBag.CurrentFilter = filter ?? "lastDecade";
+            ViewBag.CurrentSortType = sortType ?? "asc";
+            if (!string.IsNullOrWhiteSpace(filter))
             {
-                if (!showAll.Value) orders = orders.Where(o => o.IsInLastDecade);
+                if (filter == "lastDecade") orders = orders.Where(o => o.IsInLastDecade);
             }
             else
             {
@@ -50,19 +50,19 @@ namespace AutoOrder.Controllers
             switch (sortOrder)
             {
                 case "dateProspective":
-                    orders = orders.OrderBy(o => o.ProspectiveInDate);
+                    orders = sortType == "desc"
+                        ? orders.OrderByDescending(o => o.ProspectiveInDate)
+                        : orders.OrderBy(o => o.ProspectiveInDate);
                     break;
                 case "dateFact":
-                    orders = orders.OrderBy(o => o.FactOutDate);
-                    break;
-                case "dateFactDesc":
-                    orders = orders.OrderByDescending(o => o.FactOutDate);
+                    orders = sortType == "desc"
+                        ? orders.OrderByDescending(o => o.FactOutDate)
+                        : orders.OrderBy(o => o.FactOutDate);
                     break;
                 case "userName":
-                    orders = orders.OrderBy(o => o.User.UserName);
-                    break;
-                case "userNameDesc":
-                    orders = orders.OrderByDescending(o => o.User.UserName);
+                    orders = sortType == "desc"
+                        ? orders.OrderByDescending(o => o.User.UserName)
+                        : orders.OrderBy(o => o.User.UserName);
                     break;
                 default:
                     orders = orders.OrderByDescending(o => o.ProspectiveInDate);

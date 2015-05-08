@@ -1,4 +1,5 @@
-﻿@model IEnumerable<AutoOrder.Models.Order>
+﻿@using System.Web.UI.WebControls
+@model IEnumerable<AutoOrder.Models.Order>
 
 @{
     ViewBag.Title = "Заявки на автотранспорт";
@@ -13,33 +14,45 @@
 </p>
 
 <div>
-    Сортировать по:
-    @Html.ActionLink("Перспективная дата погрузки", "Index", new
+    @using (Html.BeginForm("Index", "Orders", FormMethod.Get, new { @class = "form-horizontal" }))
     {
-        sortOrder = ViewBag.DateProspectiveSort,
-        showAll = ViewBag.CurrentShowAll
-    }) |
-    @Html.ActionLink("Фактическая дата разгрузки ", "Index", new
-    {
-        sortOrder = ViewBag.DateFactSort,
-        showAll = ViewBag.CurrentShowAll
-    }) 
-    @if (User.IsInRole("admin"))
-    {
-        @:|
-        @Html.ActionLink("Имя пользователя", "Index", new
+        <div class="row">
+            <div class="col-sm-2 col-md-1">
+                <label for="sortOrder" class="control-label">Сортировка:</label>
+            </div>
+            <div class="col-sm-3">
+                <select name="sortOrder" class="form-control" onchange="this.form.submit();">
+                    <option value="dateProspective" @(ViewBag.CurrentSort == "dateProspective" ? "selected" : "")>Перспективная дата погрузки</option>
+                    <option value="dateFact" @(ViewBag.CurrentSort == "dateFact" ? "selected" : "")>Фактическая дата разгрузки</option>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <option value="userName" @(ViewBag.CurrentSort == "userName" ? "selected" : "")>Имя пользователя</option>
+                    }
+                </select>
+
+            </div>
+            <div class="col-sm-4">
+                <select name="sortType" class="form-control" onchange="this.form.submit();">
+                    <option value="asc" @(ViewBag.CurrentSortType == "asc" ? "selected" : "")>По возрастанию</option>
+                    <option value="desc" @(ViewBag.CurrentSortType == "desc" ? "selected" : "")>По убыванию</option>
+                </select>
+            </div>
+        </div>
+        
+        if (User.IsInRole("admin"))
         {
-            sortOrder = ViewBag.UserNameSort,
-            showAll = ViewBag.CurrentShowAll
-        })
-    }
-    @if (User.IsInRole("admin"))
-    {
-        <br />
-        @:Фильтр:
-        @Html.ActionLink("За последнюю декаду", "Index", new { showAll = false })
-        @:|
-        @Html.ActionLink("За все время", "Index", new { showAll = true });
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-sm-2 col-md-1">
+                    <label class="control-label pull-right" for="filter">Фильтр: </label>
+                </div>
+                <div class="col-sm-3">
+                    <select name="filter" class="form-control" onchange="this.form.submit();">
+                        <option value="allTime" @(ViewBag.CurrentFilter == "allTime" ? "selected" : "")>За все время</option>
+                        <option value="lastDecade" @(ViewBag.CurrentFilter == "lastDecade" ? "selected" : "")>За последнюю декаду</option>
+                    </select>
+                </div>
+            </div>
+        }
     }
 </div>
 
@@ -62,4 +75,8 @@
             Html.RenderPartial("OrderTile", item);
         }
     </div>
+}
+
+@section Scripts {
+
 }
