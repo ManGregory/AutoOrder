@@ -1,5 +1,4 @@
-﻿@using System.Web.UI.WebControls
-@{
+﻿@{
     ViewBag.Title = "О нас";
 }
 <h2>@ViewBag.Title.</h2>
@@ -8,8 +7,8 @@
 {
     <style>
         #map-canvas {
-            width: 100%;
             height: 350px;
+            width: 100%;
         }
     </style>
 }
@@ -42,25 +41,25 @@
     <script src="https://maps.googleapis.com/maps/api/js"></script>
     <script>
         function initialize() {
-            var position = new google.maps.LatLng(55.6527062, 37.4977808)
+            var position = new google.maps.LatLng(55.6527062, 37.4977808);
             var mapCanvas = document.getElementById('map-canvas');
             var mapOptions = {
                 center: position,
-              zoom: 16,
-              mapTypeId: google.maps.MapTypeId.ROADMAP
-            }
+                zoom: 16,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
             var map = new google.maps.Map(mapCanvas, mapOptions);
             var marker = new google.maps.Marker({
                 position: position,
                 map: map,
-                title:"General Super Logistic"
+                title: "General Super Logistic"
             });
             var contentString = '<b>General Super Logistic</b>. <br /> Самая большая логистическая компания в обозримой Вселенной';
             var infowindow = new google.maps.InfoWindow({
                 content: contentString
             });
 
-            google.maps.event.addListener(marker, 'click', function () {
+            google.maps.event.addListener(marker, 'click', function() {
                 infowindow.open(map, marker);
             });
         };

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using AutoOrder.Models;
 
@@ -13,12 +9,12 @@ namespace AutoOrder.Controllers
     [Authorize(Roles = "admin")]
     public class AutoparksController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Autoparks
         public ActionResult Index()
         {
-            var autoparks = db.Autoparks.Include(a => a.TrailerType);
+            IQueryable<Autopark> autoparks = db.Autoparks.Include(a => a.TrailerType);
             return View(autoparks.ToList());
         }
 
@@ -49,7 +45,8 @@ namespace AutoOrder.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Trailer,TrailerCount,TrailerTypeId,TrailerLength,TrailerWidth,TrailerHeight")] Autopark autopark)
+        public ActionResult Create(
+            [Bind(Include = "Id,Name,Trailer,TrailerCount,TrailerTypeId,TrailerLength,TrailerWidth,TrailerHeight")] Autopark autopark)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +80,8 @@ namespace AutoOrder.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Trailer,TrailerCount,TrailerTypeId,TrailerLength,TrailerWidth,TrailerHeight")] Autopark autopark)
+        public ActionResult Edit(
+            [Bind(Include = "Id,Name,Trailer,TrailerCount,TrailerTypeId,TrailerLength,TrailerWidth,TrailerHeight")] Autopark autopark)
         {
             if (ModelState.IsValid)
             {

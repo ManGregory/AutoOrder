@@ -13,6 +13,7 @@ namespace AutoOrder.Models
         public int Id { get; set; }
 
         public string UserId { get; set; }
+
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
 
@@ -27,6 +28,7 @@ namespace AutoOrder.Models
         [Required]
         [DisplayName("Тип перевозки")]
         public int TransportTypeId { get; set; }
+
         [ForeignKey("TransportTypeId")]
         public virtual TrailerType TransportType { get; set; }
 
@@ -45,7 +47,7 @@ namespace AutoOrder.Models
         [Required]
         [DisplayName("Перспективная дата погрузки")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString="{0:yyyy-MM-dd}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime ProspectiveInDate { get; set; }
 
         [Required]
@@ -74,6 +76,7 @@ namespace AutoOrder.Models
 
         [DisplayName("Автомобиль для перевозки")]
         public int? AutoparkId { get; set; }
+
         [ForeignKey("AutoparkId")]
         public virtual Autopark Autopark { get; set; }
 
@@ -84,7 +87,7 @@ namespace AutoOrder.Models
 
         public double Capacity
         {
-            get { return ObjectWidth * ObjectHeight * ObjectLength; }
+            get { return ObjectWidth*ObjectHeight*ObjectLength; }
         }
 
         public bool IsCompleted
@@ -111,7 +114,7 @@ namespace AutoOrder.Models
             }
         }
 
-        public string HtmlClassForRow 
+        public string HtmlClassForRow
         {
             get
             {

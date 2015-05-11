@@ -1,9 +1,8 @@
-﻿@using System.Collections.Specialized
-@{
+﻿@{
     ViewBag.Title = "Главная";
 }
 
-<style type="text/css">.slider { margin: 0;}</style>
+<style type="text/css">.slider { margin: 0; }</style>
 <br />
 
 <div class="row main">    
@@ -94,12 +93,12 @@
             });
 
             $('.overlay-wrapper').hover(
-                function () {
+                function() {
                     $('.overlay-description-top').css("height", $(this).height());
                     $('.overlay-description-bottom', this).fadeOut(200);
                     $('.overlay-description-top', this).fadeIn(200);
                 },
-                function () {
+                function() {
                     $('.overlay-description-top', this).fadeOut(200);
                     $('.overlay-description-bottom', this).fadeIn(200);
                 });

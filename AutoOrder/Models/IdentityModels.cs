@@ -12,7 +12,8 @@ namespace AutoOrder.Models
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Обратите внимание, что authenticationType должен совпадать с типом, определенным в CookieAuthenticationOptions.AuthenticationType
-            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+            ClaimsIdentity userIdentity =
+                await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Здесь добавьте утверждения пользователя
             return userIdentity;
         }
@@ -21,13 +22,8 @@ namespace AutoOrder.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("DefaultConnection", false)
         {
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
         }
 
         public DbSet<TrailerType> TrailerTypes { get; set; }
@@ -35,5 +31,10 @@ namespace AutoOrder.Models
         public DbSet<Autopark> Autoparks { get; set; }
 
         public DbSet<Order> Orders { get; set; }
+
+        public static ApplicationDbContext Create()
+        {
+            return new ApplicationDbContext();
+        }
     }
 }

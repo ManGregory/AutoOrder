@@ -77,10 +77,10 @@
     }
     @if (!(Model.IsCompleted || Model.IsCancelled))
     {
-        @Html.ActionLink("Отмена", "Cancel", new { id = Model.Id }, new { @class = "btn btn-info" })
+        @Html.ActionLink("Отмена", "Cancel", new {id = Model.Id}, new {@class = "btn btn-info"})
     }
     @if (User.IsInRole("admin"))
     {
-        @Html.ActionLink("Удалить", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+        @Html.ActionLink("Удалить", "Delete", new {id = Model.Id}, new {@class = "btn btn-danger"})
     }
 </p>

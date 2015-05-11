@@ -1,14 +1,12 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AutoOrder.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using AutoOrder.Models;
 
 namespace AutoOrder.Controllers
 {
@@ -22,7 +20,7 @@ namespace AutoOrder.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -30,26 +28,14 @@ namespace AutoOrder.Controllers
 
         public ApplicationSignInManager SignInManager
         {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
+            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
+            private set { _signInManager = value; }
         }
 
         public ApplicationUserManager UserManager
         {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
+            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+            private set { _userManager = value; }
         }
 
         //
@@ -75,7 +61,8 @@ namespace AutoOrder.Controllers
 
             // Сбои при входе не приводят к блокированию учетной записи
             // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            SignInStatus result =
+                await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -83,7 +70,7 @@ namespace AutoOrder.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, model.RememberMe});
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Неудачная попытка входа.");
@@ -101,7 +88,7 @@ namespace AutoOrder.Controllers
             {
                 return View("Error");
             }
-            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
+            return View(new VerifyCodeViewModel {Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe});
         }
 
         //
@@ -120,7 +107,10 @@ namespace AutoOrder.Controllers
             // Если пользователь введет неправильные коды за указанное время, его учетная запись 
             // будет заблокирована на заданный период. 
             // Параметры блокирования учетных записей можно настроить в IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            SignInStatus result =
+                await
+                    SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe,
+                        model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -151,13 +141,13 @@ namespace AutoOrder.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
+                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 UserManager.AddToRole(user.Id, "client");
                 if (result.Succeeded)
-                {                    
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                {
+                    await SignInManager.SignInAsync(user, false, false);
+
                     // Дополнительные сведения о том, как включить подтверждение учетной записи и сброс пароля, см. по адресу: http://go.microsoft.com/fwlink/?LinkID=320771
                     // Отправка сообщения электронной почты с этой ссылкой
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -182,7 +172,7 @@ namespace AutoOrder.Controllers
             {
                 return View("Error");
             }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            IdentityResult result = await UserManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
@@ -203,7 +193,7 @@ namespace AutoOrder.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
+                ApplicationUser user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Не показывать, что пользователь не существует или не подтвержден
@@ -249,13 +239,13 @@ namespace AutoOrder.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            ApplicationUser user = await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 // Не показывать, что пользователь не существует
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            IdentityResult result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
@@ -280,7 +270,8 @@ namespace AutoOrder.Controllers
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Запрос перенаправления к внешнему поставщику входа
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return new ChallengeResult(provider,
+                Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl}));
         }
 
         //
@@ -288,14 +279,16 @@ namespace AutoOrder.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
-            var userId = await SignInManager.GetVerifiedUserIdAsync();
+            string userId = await SignInManager.GetVerifiedUserIdAsync();
             if (userId == null)
             {
                 return View("Error");
             }
-            var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
+            IList<string> userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
+            List<SelectListItem> factorOptions =
+                userFactors.Select(purpose => new SelectListItem {Text = purpose, Value = purpose}).ToList();
+            return
+                View(new SendCodeViewModel {Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe});
         }
 
         //
@@ -315,7 +308,8 @@ namespace AutoOrder.Controllers
             {
                 return View("Error");
             }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
+            return RedirectToAction("VerifyCode",
+                new {Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe});
         }
 
         //
@@ -323,14 +317,14 @@ namespace AutoOrder.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            ExternalLoginInfo loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
             }
 
             // Выполнение входа пользователя посредством данного внешнего поставщика входа, если у пользователя уже есть имя входа
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            SignInStatus result = await SignInManager.ExternalSignInAsync(loginInfo, false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -338,13 +332,14 @@ namespace AutoOrder.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = false});
                 case SignInStatus.Failure:
                 default:
                     // Если у пользователя нет учетной записи, то ему предлагается создать ее
                     ViewBag.ReturnUrl = returnUrl;
                     ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                    return View("ExternalLoginConfirmation",
+                        new ExternalLoginConfirmationViewModel {Email = loginInfo.Email});
             }
         }
 
@@ -353,7 +348,8 @@ namespace AutoOrder.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
+        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model,
+            string returnUrl)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -363,19 +359,19 @@ namespace AutoOrder.Controllers
             if (ModelState.IsValid)
             {
                 // Получение сведений о пользователе от внешнего поставщика входа
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                ExternalLoginInfo info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
+                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
+                IdentityResult result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        await SignInManager.SignInAsync(user, false, false);
                         return RedirectToLocal(returnUrl);
                     }
                 }
@@ -425,20 +421,18 @@ namespace AutoOrder.Controllers
         }
 
         #region Вспомогательные приложения
+
         // Используется для защиты от XSRF-атак при добавлении внешних имен входа
         private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager
         {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
+            get { return HttpContext.GetOwinContext().Authentication; }
         }
 
         private void AddErrors(IdentityResult result)
         {
-            foreach (var error in result.Errors)
+            foreach (string error in result.Errors)
             {
                 ModelState.AddModelError("", error);
             }
@@ -473,7 +467,7 @@ namespace AutoOrder.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
+                var properties = new AuthenticationProperties {RedirectUri = RedirectUri};
                 if (UserId != null)
                 {
                     properties.Dictionary[XsrfKey] = UserId;
@@ -481,6 +475,7 @@ namespace AutoOrder.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
+
         #endregion
     }
 }

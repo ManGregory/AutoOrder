@@ -1,27 +1,27 @@
-﻿@using System.Web.UI.WebControls
+﻿@using AutoOrder.Models
 @model IEnumerable<AutoOrder.Models.Order>
 
 @{
     ViewBag.Title = "Заявки на автотранспорт";
     const int colSize = 4;
-    var rows = (Model.Count() / colSize);
+    int rows = (Model.Count()/colSize);
 }
 
 <h2>Заявки на автотранспорт</h2>
 
 <p>
-    @Html.ActionLink("Создать заявку", "Create", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Создать заявку", "Create", null, new {@class = "btn btn-primary"})
 </p>
 
 <div>
-    @using (Html.BeginForm("Index", "Orders", FormMethod.Get, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("Index", "Orders", FormMethod.Get, new {@class = "form-horizontal"}))
     {
         <div class="row">
             <div class="col-sm-2 col-md-1">
                 <label for="sortOrder" class="control-label">Сортировка:</label>
             </div>
             <div class="col-sm-3">
-                <select name="sortOrder" class="form-control" onchange="this.form.submit();">
+                <select name="sortOrder" class="form-control" onchange=" this.form.submit(); ">
                     <option value="dateProspective" @(ViewBag.CurrentSort == "dateProspective" ? "selected" : "")>Перспективная дата погрузки</option>
                     <option value="dateFact" @(ViewBag.CurrentSort == "dateFact" ? "selected" : "")>Фактическая дата разгрузки</option>
                     @if (User.IsInRole("admin"))
@@ -32,13 +32,13 @@
 
             </div>
             <div class="col-sm-4">
-                <select name="sortType" class="form-control" onchange="this.form.submit();">
+                <select name="sortType" class="form-control" onchange=" this.form.submit(); ">
                     <option value="asc" @(ViewBag.CurrentSortType == "asc" ? "selected" : "")>По возрастанию</option>
                     <option value="desc" @(ViewBag.CurrentSortType == "desc" ? "selected" : "")>По убыванию</option>
                 </select>
             </div>
         </div>
-        
+
         if (User.IsInRole("admin"))
         {
             <div class="row" style="margin-top: 10px;">
@@ -46,7 +46,7 @@
                     <label class="control-label pull-right" for="filter">Фильтр: </label>
                 </div>
                 <div class="col-sm-3">
-                    <select name="filter" class="form-control" onchange="this.form.submit();">
+                    <select name="filter" class="form-control" onchange=" this.form.submit(); ">
                         <option value="allTime" @(ViewBag.CurrentFilter == "allTime" ? "selected" : "")>За все время</option>
                         <option value="lastDecade" @(ViewBag.CurrentFilter == "lastDecade" ? "selected" : "")>За последнюю декаду</option>
                     </select>
@@ -67,10 +67,10 @@
 </div>
 <br />
 
-@for (var row = 0; row <= rows; row++)
+@for (int row = 0; row <= rows; row++)
 {
     <div class="row">
-        @foreach (var item in Model.Skip(row * colSize).Take(colSize))
+        @foreach (Order item in Model.Skip(row*colSize).Take(colSize))
         {
             Html.RenderPartial("OrderTile", item);
         }

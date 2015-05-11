@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
+using AutoOrder.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using AutoOrder.Models;
+using Microsoft.Owin.Security.DataProtection;
 
 namespace AutoOrder
 {
@@ -40,7 +37,8 @@ namespace AutoOrder
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,
+            IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Настройка логики проверки имен пользователей
@@ -67,10 +65,11 @@ namespace AutoOrder
 
             // Регистрация поставщиков двухфакторной проверки подлинности. Для получения кода проверки пользователя в данном приложении используется телефон и сообщения электронной почты
             // Здесь можно указать собственный поставщик и подключить его.
-            manager.RegisterTwoFactorProvider("Код, полученный по телефону", new PhoneNumberTokenProvider<ApplicationUser>
-            {
-                MessageFormat = "Ваш код безопасности: {0}"
-            });
+            manager.RegisterTwoFactorProvider("Код, полученный по телефону",
+                new PhoneNumberTokenProvider<ApplicationUser>
+                {
+                    MessageFormat = "Ваш код безопасности: {0}"
+                });
             manager.RegisterTwoFactorProvider("Код из сообщения", new EmailTokenProvider<ApplicationUser>
             {
                 Subject = "Код безопасности",
@@ -78,10 +77,10 @@ namespace AutoOrder
             });
             manager.EmailService = new EmailService();
             manager.SmsService = new SmsService();
-            var dataProtectionProvider = options.DataProtectionProvider;
+            IDataProtectionProvider dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
+                manager.UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
@@ -98,10 +97,11 @@ namespace AutoOrder
 
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {
-            return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
+            return user.GenerateUserIdentityAsync((ApplicationUserManager) UserManager);
         }
 
-        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
+        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options,
+            IOwinContext context)
         {
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace AutoOrder.Models
 {
@@ -18,7 +19,7 @@ namespace AutoOrder.Models
     public class SendCodeViewModel
     {
         public string SelectedProvider { get; set; }
-        public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+        public ICollection<SelectListItem> Providers { get; set; }
         public string ReturnUrl { get; set; }
         public bool RememberMe { get; set; }
     }
@@ -31,6 +32,7 @@ namespace AutoOrder.Models
         [Required]
         [Display(Name = "Код")]
         public string Code { get; set; }
+
         public string ReturnUrl { get; set; }
 
         [Display(Name = "Запомнить браузер?")]
@@ -77,7 +79,8 @@ namespace AutoOrder.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Подтверждение пароля")]
-        [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password",
+            ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -96,7 +99,8 @@ namespace AutoOrder.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Подтверждение пароля")]
-        [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password",
+            ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

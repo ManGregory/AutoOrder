@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -28,7 +27,7 @@ namespace AutoOrder.Controllers
         public ActionResult Index(string sortOrder, string filter, string sortType)
         {
             SetSortOrderParams(sortOrder);
-            var orders = db.Orders
+            IEnumerable<Order> orders = db.Orders
                 .Include(o => o.TransportType)
                 .Include(o => o.User)
                 .Include(o => o.Autopark)
@@ -76,7 +75,7 @@ namespace AutoOrder.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateProspectiveSort = string.IsNullOrEmpty(sortOrder) ? "dateProspective" : "";
             ViewBag.DateFactSort = sortOrder == "dateFact" ? "dateFactDesc" : "dateFact";
-            ViewBag.UserNameSort = sortOrder == "userName" ? "userNameDesc" : "userName";            
+            ViewBag.UserNameSort = sortOrder == "userName" ? "userNameDesc" : "userName";
         }
 
         // GET: Orders/Details/5
@@ -105,16 +104,16 @@ namespace AutoOrder.Controllers
         {
             ViewBag.TransportTypeId = order == null
                 ? new SelectList(db.TrailerTypes, "Id", "Name")
-                : new SelectList(db.TrailerTypes, "Id", "Name", order.TransportTypeId);              
-            var availableAutopark = GetAvailableAutopark(autoParkId, order);
+                : new SelectList(db.TrailerTypes, "Id", "Name", order.TransportTypeId);
+            IEnumerable<Autopark> availableAutopark = GetAvailableAutopark(autoParkId, order);
             ViewBag.AutoparkId = new SelectList(availableAutopark, "Id", "Name", autoParkId);
-        }        
+        }
 
         private IEnumerable<Autopark> GetAvailableAutopark(int? currentAutoparkId = null, Order currentOrder = null)
         {
-            var orders = db.Orders.AsEnumerable().ToList();
-            var autoparks = db.Autoparks.AsEnumerable().ToList();
-            var result = 
+            List<Order> orders = db.Orders.AsEnumerable().ToList();
+            List<Autopark> autoparks = db.Autoparks.AsEnumerable().ToList();
+            IEnumerable<Autopark> result =
                 autoparks.Where(
                     a =>
                         (a.Id == currentAutoparkId ||
@@ -135,7 +134,11 @@ namespace AutoOrder.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserId,Phone,TransportedObjectType,TransportTypeId,ObjectLength,ObjectWidth,ObjectHeight,ProspectiveInDate,ProspectiveOutDate,AddressFrom,AddressTo,FactInDate,FactOutDate,AutoparkId")] Order order)
+        public ActionResult Create(
+            [Bind(
+                Include =
+                    "Id,UserId,Phone,TransportedObjectType,TransportTypeId,ObjectLength,ObjectWidth,ObjectHeight,ProspectiveInDate,ProspectiveOutDate,AddressFrom,AddressTo,FactInDate,FactOutDate,AutoparkId"
+                )] Order order)
         {
             Check(order);
             if (ModelState.IsValid)
@@ -178,10 +181,10 @@ namespace AutoOrder.Controllers
 
         private void SetAutopark(Order order)
         {
-            var availableAutoPark = GetAvailableAutopark();
+            IEnumerable<Autopark> availableAutoPark = GetAvailableAutopark();
             if (availableAutoPark != null)
             {
-                var firstOrDefault = availableAutoPark
+                Autopark firstOrDefault = availableAutoPark
                     .AsEnumerable()
                     .FirstOrDefault(
                         a =>
@@ -201,7 +204,7 @@ namespace AutoOrder.Controllers
 
         // GET: Orders/Edit/5
         public ActionResult Edit(int? id)
-        {            
+        {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -220,7 +223,11 @@ namespace AutoOrder.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserId,Phone,TransportedObjectType,TransportTypeId,ObjectLength,ObjectWidth,ObjectHeight,ProspectiveInDate,ProspectiveOutDate,AddressFrom,AddressTo,FactInDate,FactOutDate,AutoparkId,Comment")] Order order)
+        public ActionResult Edit(
+            [Bind(
+                Include =
+                    "Id,UserId,Phone,TransportedObjectType,TransportTypeId,ObjectLength,ObjectWidth,ObjectHeight,ProspectiveInDate,ProspectiveOutDate,AddressFrom,AddressTo,FactInDate,FactOutDate,AutoparkId,Comment"
+                )] Order order)
         {
             Check(order);
             if (ModelState.IsValid)

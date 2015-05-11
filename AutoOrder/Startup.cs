@@ -1,7 +1,9 @@
-﻿using Microsoft.Owin;
+﻿using AutoOrder;
+using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(AutoOrder.Startup))]
+[assembly: OwinStartup(typeof (Startup))]
+
 namespace AutoOrder
 {
     public partial class Startup
