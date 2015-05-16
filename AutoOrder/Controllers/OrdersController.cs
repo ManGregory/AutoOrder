@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -168,6 +169,11 @@ namespace AutoOrder.Controllers
             if (order.ProspectiveInDate > order.ProspectiveOutDate)
             {
                 modelState.AddModelError("", "Перспективная дата погрузки должна быть меньше фактической даты погрузки");
+            }
+            if (order.ProspectiveInDate < DateTime.Now || order.ProspectiveOutDate < DateTime.Now ||
+                order.FactInDate < DateTime.Now || order.FactOutDate < DateTime.Now)
+            {
+                modelState.AddModelError("", "Все даты должны быть больше либо равны текущей");
             }
         }
 
