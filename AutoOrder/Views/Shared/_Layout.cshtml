@@ -37,7 +37,11 @@
                         @if (User.IsInRole("admin"))
                         {
                             <li>@Html.ActionLink("Автопарк", "Index", "Autoparks")</li>
-                        }                    
+                        }
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li>@Html.ActionLink("Клиенты", "Index", "ApplicationUsers")</li>
+                        }                        
                     </ul>
                     @Html.Partial("_LoginPartial")
                 </div>

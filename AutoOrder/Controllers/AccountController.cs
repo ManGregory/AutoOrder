@@ -15,6 +15,7 @@ namespace AutoOrder.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _db;
 
         public AccountController()
         {
@@ -61,8 +62,12 @@ namespace AutoOrder.Controllers
 
             // Сбои при входе не приводят к блокированию учетной записи
             // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
-            SignInStatus result =
-                await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+            var user = UserManager.FindByName(model.Email);
+            if ((user != null) && (user.IsInBlackList))
+            {
+                return View("BlackList");
+            }
+            SignInStatus result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -141,7 +146,7 @@ namespace AutoOrder.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {UserName = model.Email, Email = model.Email};
+                var user = new ApplicationUser {UserName = model.Email, Email = model.Email, Address = model.Address, FullName = model.FullName};
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 UserManager.AddToRole(user.Id, "client");
                 if (result.Succeeded)

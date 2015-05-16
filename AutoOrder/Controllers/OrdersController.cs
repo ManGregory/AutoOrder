@@ -170,8 +170,8 @@ namespace AutoOrder.Controllers
             {
                 modelState.AddModelError("", "Перспективная дата погрузки должна быть меньше фактической даты погрузки");
             }
-            if (order.ProspectiveInDate < DateTime.Now || order.ProspectiveOutDate < DateTime.Now ||
-                order.FactInDate < DateTime.Now || order.FactOutDate < DateTime.Now)
+            if (order.ProspectiveInDate <= DateTime.Now || order.ProspectiveOutDate <= DateTime.Now ||
+                order.FactInDate <= DateTime.Now || order.FactOutDate <= DateTime.Now)
             {
                 modelState.AddModelError("", "Все даты должны быть больше либо равны текущей");
             }

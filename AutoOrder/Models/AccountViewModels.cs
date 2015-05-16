@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
@@ -82,6 +83,12 @@ namespace AutoOrder.Models
         [System.ComponentModel.DataAnnotations.Compare("Password",
             ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
+
+        [DisplayName("ФИО")]
+        public string FullName { get; set; }
+
+        [DisplayName("Адрес")]
+        public string Address { get; set; }
     }
 
     public class ResetPasswordViewModel
