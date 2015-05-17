@@ -38,21 +38,18 @@
                 </select>
             </div>
         </div>
-
-        if (User.IsInRole("admin"))
-        {
-            <div class="row" style="margin-top: 10px;">
-                <div class="col-sm-2 col-md-1">
-                    <label class="control-label pull-right" for="filter">Фильтр: </label>
-                </div>
-                <div class="col-sm-3">
-                    <select name="filter" class="form-control" onchange=" this.form.submit(); ">
-                        <option value="allTime" @(ViewBag.CurrentFilter == "allTime" ? "selected" : "")>За все время</option>
-                        <option value="lastDecade" @(ViewBag.CurrentFilter == "lastDecade" ? "selected" : "")>За последнюю декаду</option>
-                    </select>
-                </div>
+        
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-sm-2 col-md-1">
+                <label class="control-label pull-right" for="filter">Фильтр: </label>
             </div>
-        }
+            <div class="col-sm-3">
+                <select name="filter" class="form-control" onchange=" this.form.submit(); ">
+                    <option value="allTime" @(ViewBag.CurrentFilter == "allTime" ? "selected" : "")>За все время</option>
+                    <option value="lastDecade" @(ViewBag.CurrentFilter == "lastDecade" ? "selected" : "")>За последнюю декаду</option>
+                </select>
+            </div>
+        </div>        
     }
 </div>
 
